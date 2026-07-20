@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "express": "^5.2.1",
+    "onoff": "^6.0.3",
     "pigpio": "^3.3.1"
   },
   "devDependencies": {

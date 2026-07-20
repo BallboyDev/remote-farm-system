@@ -1,6 +1,3 @@
-// // A6042, B2772, C0546, D9364, E2282, admin
-
-
 const users = {
     A6042: { auth: 1, }, // 아버지
     B2772: { auth: 1, }, // 어머니
@@ -10,15 +7,26 @@ const users = {
     admin: { auth: 0, }, // 관리자
 }
 
+const checkAuth = (id) => {
+    const user = users[id];
+
+    if (!user) {
+        return { status: 'failure' }
+    }
+    return { status: 'success', data: { id: id, auth: user.auth } };
+}
+
+
 const login = (id) => {
     const user = users[id];
 
     if (!user) {
-        return { status: -1 }
+        return { status: 'failure' }
     }
-    return { status: 0, data: { id: id, auth: user.auth } };
+    return { status: 'success', data: { id: id } };
 }
 
 module.exports = {
     login,
+    checkAuth,
 };      

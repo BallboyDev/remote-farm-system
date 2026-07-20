@@ -6,16 +6,11 @@
   import Info from "./lib/Info.svelte";
   import Login from "./lib/Login.svelte";
   import Watering from "./lib/Watering.svelte";
+  import Test from "./lib/Test.svelte";
 
   let loginStatus = false;
 
-  onMount(() => {
-    // 페이지가 로드될 때 실행되는 코드
-    const user = localStorage.getItem("userId");
-    if (user) {
-      loginStatus = true;
-    }
-  });
+  onMount(() => {});
 </script>
 
 <svelte:head>
@@ -31,10 +26,14 @@
       <h2 class="mainTitle">Remote Farm System</h2>
       <p class="subTitle">원격 농장 제어 대시보드</p>
     </div>
-    <Login />
+    <Login bind:loginStatus />
   </div>
 
   <section class="content">
+    <!-- 관리자용 테스트 기능 -->
+    {#if !!loginStatus && localStorage.getItem("userId") === "admin"}
+      <Test />
+    {/if}
     <!-- 시스템 및 환경 정보 -->
     <Info />
 

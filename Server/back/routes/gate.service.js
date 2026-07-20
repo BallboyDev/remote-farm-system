@@ -1,8 +1,8 @@
 const open = () => {
-    return { status: 0, data: { message: "Gate opened" } };
+    return { status: true, data: { message: "Gate opened" } };
 }
 const close = () => {
-    return { status: 0, data: { message: "Gate closed" } };
+    return { status: true, data: { message: "Gate closed" } };
 }
 
 module.exports = {

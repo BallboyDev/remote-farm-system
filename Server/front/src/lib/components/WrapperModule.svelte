@@ -6,7 +6,12 @@
     <div class="d-flex align-items-center mb-2">
         <h3>{title}</h3>
 
-        <div class="d-flex"><p class={`state `}></p></div>
+        {#if state === null}
+            <!-- <div
+                class={`state ${state === 1 ? "bg-success" : "bg-danger"}`}
+            ></div> -->
+            <div class="d-flex"><p class={`state `}></p></div>
+        {/if}
     </div>
     <div class="moduleBody">
         {@render children?.()}

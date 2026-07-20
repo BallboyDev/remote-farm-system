@@ -8,6 +8,34 @@ const frontendDistPath = path.resolve(__dirname, '../front/dist');
 // Middleware to parse JSON requests
 app.use(express.json());
 
+// const gpioConnection = (command) => {
+//     return new Promise((resolve, reject) => {
+//         const client = net.createConnection(
+//             {
+//                 host: '127.0.0.1',
+//                 port: 8888
+//             },
+//             () => {
+//                 client.write(command)
+//             }
+//         )
+
+//         client.on('data', (data) => {
+//             console.log("python 응답 : ", data.toString())
+//             client.end()
+//         })
+
+//         client.on("error", (error) => {
+//             console.error('연결 실패', error.message)
+//         })
+
+//         client.setTimeout(3000, () => {
+//             client.destroy();
+//             reject(new Error("서버 응답 시간 초과"))
+//         });
+//     })
+// }
+
 // Serve the built frontend assets.
 app.use(express.static(frontendDistPath));
 

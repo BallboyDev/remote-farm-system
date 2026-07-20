@@ -8,7 +8,15 @@ router.get('/', (req, res) => {
     res.send('Login route');
 });
 
-router.post('/', (req, res) => {
+router.post('/checkAuth', (req, res) => {
+    const { id } = req.body;
+
+    const result = loginService.checkAuth(id);
+
+    res.json(result);
+});
+
+router.post('/login', (req, res) => {
 
     const { id } = req.body;
 
