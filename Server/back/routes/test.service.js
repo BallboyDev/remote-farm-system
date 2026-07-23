@@ -4,7 +4,7 @@ const test1 = async () => {
     console.log('LED on')
 
     try {
-        const result = await gpioConnection({ type: 'led', order: 'on' });
+        const result = await gpioConnection({ type: 'led', action: 'on' });
 
         console.log(result)
 
@@ -15,8 +15,19 @@ const test1 = async () => {
     }
 
 }
-const test2 = () => {
-    return { status: 'success', data: 'test2' }
+const test2 = async () => {
+    console.log('LED off')
+
+    try {
+        const result = await gpioConnection({ type: 'led', action: 'off' });
+
+        console.log(result)
+
+        return { status: 'success', data: 'test2' }
+    } catch (err) {
+        console.log(err)
+        return { status: 'failure', data: err }
+    }
 }
 const test3 = () => {
     return { status: 'success', data: 'test3' }
