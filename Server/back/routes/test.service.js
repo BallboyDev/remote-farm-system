@@ -1,10 +1,10 @@
 const gpioConnection = require('./gpio');
 
 const test1 = async () => {
-    console.log('LED on')
 
     try {
-        const result = await gpioConnection({ type: 'led', action: 'on' });
+        const order = { device: 'led', command: 'on' }
+        const result = await gpioConnection(order);
 
         console.log(result)
 
@@ -16,10 +16,10 @@ const test1 = async () => {
 
 }
 const test2 = async () => {
-    console.log('LED off')
 
     try {
-        const result = await gpioConnection({ type: 'led', action: 'off' });
+        const order = { device: 'led', command: 'off' }
+        const result = await gpioConnection(order);
 
         console.log(result)
 
@@ -29,8 +29,19 @@ const test2 = async () => {
         return { status: 'failure', data: err }
     }
 }
-const test3 = () => {
-    return { status: 'success', data: 'test3' }
+const test3 = async () => {
+
+    try {
+        const order = { device: 'test', command: 'off' }
+        const result = await gpioConnection(order);
+
+        console.log(result)
+
+        return { status: 'success', data: 'test3' }
+    } catch (err) {
+        console.log(err)
+        return { status: 'failure', data: err }
+    }
 }
 
 module.exports = {
