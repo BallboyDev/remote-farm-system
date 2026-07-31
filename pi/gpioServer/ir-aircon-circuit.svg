@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="900" viewBox="0 0 1500 900">
+  <style>
+    text { font-family: Arial, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; fill:#172033 }
+    .title { font-size:34px; font-weight:700 }
+    .h2 { font-size:25px; font-weight:700 }
+    .label { font-size:19px; font-weight:600 }
+    .small { font-size:16px }
+    .box { fill:#f8fafc; stroke:#64748b; stroke-width:2 }
+    .module { fill:#172033; stroke:#0f172a; stroke-width:2 }
+    .module-text { fill:#fff; font-size:18px; font-weight:700 }
+    .wire { fill:none; stroke-width:5; stroke-linecap:round; stroke-linejoin:round }
+    .red { stroke:#dc2626 }
+    .orange { stroke:#f97316 }
+    .blue { stroke:#2563eb }
+    .black { stroke:#111827 }
+    .gray { stroke:#94a3b8; stroke-dasharray:8 7 }
+    .node { stroke:#fff; stroke-width:2 }
+  </style>
+
+  <rect width="1500" height="900" fill="#fff"/>
+  <text x="750" y="55" text-anchor="middle" class="title">Raspberry Pi 에어컨 적외선 송수신 회로</text>
+
+  <rect x="30" y="85" width="920" height="690" rx="18" fill="#fff7f7" stroke="#dc2626" stroke-width="3"/>
+  <text x="490" y="130" text-anchor="middle" class="h2">적외선 송신 회로 — S9012 + 2N2222A</text>
+
+  <rect x="75" y="190" width="245" height="410" rx="14" class="box"/>
+  <text x="197" y="225" text-anchor="middle" class="h2">Raspberry Pi 3</text>
+  <circle cx="115" cy="285" r="10" fill="#f97316"/><text x="140" y="292" class="label">핀 1 · 3.3V</text>
+  <circle cx="280" cy="285" r="10" fill="#dc2626"/><text x="75" y="270" class="small">5V</text><text x="175" y="292" text-anchor="end" class="label">핀 2</text>
+  <circle cx="280" cy="345" r="10" fill="#111827"/><text x="175" y="352" text-anchor="end" class="label">핀 6</text>
+  <circle cx="115" cy="405" r="10" fill="#2563eb"/><text x="140" y="412" class="label">핀 11 · GPIO17</text>
+  <circle cx="280" cy="465" r="10" fill="#2563eb"/><text x="75" y="450" class="small">GPIO18</text><text x="175" y="472" text-anchor="end" class="label">핀 12</text>
+  <text x="197" y="560" text-anchor="middle" class="small">물리 핀 번호 기준</text>
+
+  <path d="M280 285 H555 V210 H675 V180" class="wire red"/>
+  <text x="405" y="270" class="label">+5V</text>
+
+  <rect x="510" y="290" width="90" height="44" rx="6" class="box"/>
+  <text x="555" y="318" text-anchor="middle" class="label">R3 10kΩ</text>
+  <path d="M555 210 V290 M555 334 V365" class="wire red"/>
+
+  <circle cx="675" cy="250" r="70" fill="#fff" stroke="#111827" stroke-width="3"/>
+  <text x="675" y="245" text-anchor="middle" class="h2">S9012</text>
+  <text x="675" y="275" text-anchor="middle" class="label">PNP</text>
+  <path d="M675 180 V210 M605 250 H575 M675 320 V350" class="wire black"/>
+  <text x="688" y="195" class="label">E</text><text x="585" y="238" class="label">B</text><text x="688" y="345" class="label">C</text>
+  <path d="M555 365 V250 H605" class="wire red"/>
+
+  <rect x="510" y="405" width="90" height="44" rx="6" class="box"/>
+  <text x="555" y="433" text-anchor="middle" class="label">R2 1kΩ</text>
+  <path d="M555 365 V405 M555 449 V500" class="wire black"/>
+
+  <circle cx="675" cy="540" r="70" fill="#fff" stroke="#111827" stroke-width="3"/>
+  <text x="675" y="535" text-anchor="middle" class="h2">2N2222A</text>
+  <text x="675" y="565" text-anchor="middle" class="label">NPN</text>
+  <path d="M675 470 V500 M605 540 H575 M675 610 V675" class="wire black"/>
+  <text x="688" y="495" class="label">C</text><text x="585" y="528" class="label">B</text><text x="688" y="638" class="label">E</text>
+  <path d="M555 500 V540 H605" class="wire black"/>
+
+  <rect x="380" y="518" width="120" height="44" rx="6" class="box"/>
+  <text x="440" y="546" text-anchor="middle" class="label">R1 2.2kΩ</text>
+  <path d="M280 465 H350 V540 H380 M500 540 H605" class="wire blue"/>
+
+  <rect x="790" y="220" width="125" height="260" rx="14" class="module"/>
+  <text x="852" y="260" text-anchor="middle" class="module-text">940nm</text>
+  <text x="852" y="288" text-anchor="middle" class="module-text">IR 송신 모듈</text>
+  <circle cx="852" cy="340" r="24" fill="#dbeafe" stroke="#94a3b8" stroke-width="4"/>
+  <circle cx="812" cy="450" r="8" fill="#dc2626"/><circle cx="852" cy="450" r="8" fill="#94a3b8"/><circle cx="892" cy="450" r="8" fill="#111827"/>
+  <text x="812" y="510" text-anchor="middle" class="label">DAT</text><text x="852" y="510" text-anchor="middle" class="label">VCC</text><text x="892" y="510" text-anchor="middle" class="label">GND</text>
+  <path d="M675 350 H750 V450 H812" class="wire red"/>
+  <path d="M852 450 V540" class="wire gray"/>
+  <text x="852" y="568" text-anchor="middle" class="label">NC · 연결 안 함</text>
+  <path d="M892 450 V675 H675" class="wire black"/>
+  <path d="M280 345 V675 H675" class="wire black"/>
+  <text x="475" y="710" text-anchor="middle" class="label">공통 GND</text>
+
+  <rect x="980" y="85" width="490" height="690" rx="18" fill="#fffaf5" stroke="#f97316" stroke-width="3"/>
+  <text x="1225" y="130" text-anchor="middle" class="h2">적외선 수신 회로</text>
+  <rect x="1020" y="190" width="200" height="360" rx="14" class="box"/>
+  <text x="1120" y="225" text-anchor="middle" class="h2">Raspberry Pi 3</text>
+  <circle cx="1060" cy="285" r="10" fill="#f97316"/><text x="1080" y="292" class="label">핀 1 · 3.3V</text>
+  <circle cx="1180" cy="345" r="10" fill="#111827"/><text x="1160" y="352" text-anchor="end" class="label">핀 6</text>
+  <circle cx="1060" cy="405" r="10" fill="#2563eb"/><text x="1080" y="412" class="label">핀 11 · GPIO17</text>
+
+  <rect x="1300" y="230" width="130" height="280" rx="14" class="module"/>
+  <text x="1365" y="270" text-anchor="middle" class="module-text">IR 수신 모듈</text>
+  <rect x="1335" y="300" width="60" height="75" rx="7" fill="#334155" stroke="#94a3b8" stroke-width="3"/>
+  <circle cx="1325" cy="475" r="8" fill="#2563eb"/><circle cx="1365" cy="475" r="8" fill="#f97316"/><circle cx="1405" cy="475" r="8" fill="#111827"/>
+  <text x="1325" y="545" text-anchor="middle" class="label">DAT</text><text x="1365" y="545" text-anchor="middle" class="label">VCC</text><text x="1405" y="545" text-anchor="middle" class="label">GND</text>
+  <path d="M1060 285 H1260 V475 H1365" class="wire orange"/>
+  <path d="M1060 405 H1240 V475 H1325" class="wire blue"/>
+  <path d="M1180 345 V635 H1405 V475" class="wire black"/>
+  <text x="1240" y="670" text-anchor="middle" class="label">공통 GND</text>
+
+  <rect x="60" y="805" width="1380" height="65" rx="12" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="750" y="833" text-anchor="middle" class="label">주의: E/B/C 실제 다리 순서는 트랜지스터 제조사 데이터시트로 확인</text>
+  <text x="750" y="858" text-anchor="middle" class="small">빨강=5V · 주황=3.3V · 파랑=신호 · 검정=GND | 송신 모듈 VCC는 NC 여부를 멀티미터로 먼저 확인</text>
+</svg>
