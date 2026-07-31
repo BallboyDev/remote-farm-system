@@ -11,7 +11,7 @@ def ir_recive():
     print('ir_recive')
 
 def ir_transmmit(raw_data):
-    print('ir_transmmit :', raw_data)
+    print('ir_transmmit')
 
     GPIO.setwarnings(False)
     GPIO.setmode(GPIO.BCM)
@@ -24,6 +24,7 @@ def ir_transmmit(raw_data):
         print("에어컨 IR 신호 전송")
 
         for index, duration_us in enumerate(raw_data):
+            print(index, duration_us)
             if index % 2 == 0:
                 pwm.ChangeDutyCycle(DUTY_CYCLE)
             else:
