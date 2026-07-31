@@ -1,0 +1,89 @@
+>> 휴지 없이 600마이크로초
+pulse 152
+timeout 135255
+pulse 78
+timeout 129324
+pulse 334
+timeout 131420
+pulse 177
+space 100476
+pulse 73
+space 100819
+pulse 169
+timeout 131566
+pulse 157
+timeout 132411
+pulse 162
+timeout 133520
+pulse 429
+timeout 131988
+pulse 477
+timeout 129489
+pulse 284
+timeout 131975
+pulse 232
+timeout 134282
+
+---
+
+>> 휴지 없이 2밀리초 
+pulse 8526572
+timeout 130880
+pulse 1848
+space 100291
+pulse 1931
+space 100295
+pulse 1810
+space 100397
+pulse 1792
+space 100387
+pulse 1823
+space 100270
+pulse 1888
+space 100340
+pulse 1948
+space 100213
+pulse 1977
+space 100175
+pulse 1951
+space 100318
+pulse 1825
+timeout 129299
+pulse 1046
+space 101312
+pulse 1184
+space 100757
+pulse 100
+space 689
+pulse 698
+space 100629
+pulse 1604
+space 101722
+pulse 93
+space 101130
+pulse 85
+space 1172
+pulse 216
+space 100728
+pulse 1370
+timeout 132664
+pulse 1874
+timeout 132091
+
+---
+
+>> 휴지 1장 2밀리초
+pulse 112
+timeout 130300
+pulse 246
+timeout 129725
+pulse 115
+timeout 133406
+pulse 85
+timeout 131680
+pulse 106
+timeout 132956
+pulse 248
+timeout 132381
+pulse 75
+timeout 130943

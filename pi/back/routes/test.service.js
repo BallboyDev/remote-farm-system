@@ -4,7 +4,7 @@ const order = [
     { index: 1, device: 'led', command: 'on' },
     { index: 2, device: 'led', command: 'off' },
     { index: 3, device: 'ir', command: 'transmit' },
-    { index: 4, device: 'led', command: 'test' },
+    { index: 4, device: 'ir', command: 'test' },
     { index: 5, device: 'led', command: 'on' },
     { index: 6, device: 'led', command: 'on' },
     { index: 7, device: 'led', command: 'on' },

@@ -39,19 +39,19 @@
     </ButtonGroup>
     <ButtonGroup>
         <Button
-            color="primary"
+            color="secondary"
             onclick={() => {
                 test(4);
             }}>Test 4</Button
         >
         <Button
-            color="warning"
+            color="success"
             onclick={() => {
                 test(5);
             }}>Test 5</Button
         >
         <Button
-            color="danger"
+            color="info"
             onclick={() => {
                 test(6);
             }}>Test 6</Button
@@ -59,19 +59,20 @@
     </ButtonGroup>
     <ButtonGroup>
         <Button
-            color="primary"
+            color="light"
             onclick={() => {
                 test(7);
             }}>Test 7</Button
         >
         <Button
-            color="warning"
+            color="dark"
             onclick={() => {
                 test(8);
             }}>Test 8</Button
         >
         <Button
-            color="danger"
+            color="primary"
+            outline
             onclick={() => {
                 test(9);
             }}>Test 9</Button

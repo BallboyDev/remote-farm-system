@@ -57,6 +57,69 @@ def ir_transmmit(raw_data):
         GPIO.output(TX_GPIO, GPIO.LOW)
         GPIO.cleanup()
 
+def ir_test():
+    print('ir_test')
+
+    GPIO.setwarnings(False)
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(TX_GPIO, GPIO.OUT, initial=GPIO.LOW)
+
+    # try:
+    #     print("5초 동안 OFF")
+    #     GPIO.output(TX_GPIO, GPIO.LOW)
+    #     time.sleep(5)
+
+    #     print("5초 동안 ON")
+    #     GPIO.output(TX_GPIO, GPIO.HIGH)
+    #     time.sleep(5)
+
+    #     print("다시 5초 동안 OFF")
+    #     GPIO.output(TX_GPIO, GPIO.LOW)
+    #     time.sleep(5)
+
+    # finally:
+    #     GPIO.output(TX_GPIO, GPIO.LOW)
+    #     GPIO.cleanup()
+
+    
+    pwm = GPIO.PWM(TX_GPIO, CARRIER_HZ)
+    pwm.start(0)
+
+    try:
+        time.sleep(1)
+
+        # for count in range(5):
+        #     print(f"{count + 1}: 10ms pulse 전송")
+
+        #     pwm.ChangeDutyCycle(DUTY_CYCLE)
+        #     time.sleep(0.010)
+
+        #     pwm.ChangeDutyCycle(0)
+        #     GPIO.output(TX_GPIO, GPIO.LOW)
+        #     time.sleep(0.100)
+
+        # for count in range(10):
+        #     pwm.ChangeDutyCycle(33)
+        #     time.sleep(0.0006)
+
+        #     pwm.ChangeDutyCycle(0)
+        #     GPIO.output(TX_GPIO, GPIO.LOW)
+        #     time.sleep(0.100)
+
+        for count in range(10):
+            pwm.ChangeDutyCycle(33)
+            time.sleep(0.002)
+
+            pwm.ChangeDutyCycle(0)
+            GPIO.output(TX_GPIO, GPIO.LOW)
+            time.sleep(0.100)
+
+    finally:
+        pwm.ChangeDutyCycle(0)
+        pwm.stop()
+        GPIO.output(TX_GPIO, GPIO.LOW)
+        GPIO.cleanup()
+
 def wait_microseconds(duration_us):
     """
     마이크로초 단위로 대기합니다.
@@ -77,6 +140,9 @@ def ir_actions(command):
         
         case 'transmit':
             ir_transmmit(RAW_DATA1)
+
+        case 'test':
+            ir_test()    
         
         case _:
             print('지원하지 않는 명령어')
