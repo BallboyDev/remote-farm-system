@@ -32,7 +32,7 @@ const test2 = async () => {
 const test3 = async () => {
 
     try {
-        const order = { device: 'test', command: 'off' }
+        const order = { device: 'ir', command: 'transmit' }
         const result = await gpioConnection(order);
 
         console.log(result)
