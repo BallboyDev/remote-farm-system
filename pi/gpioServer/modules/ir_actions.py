@@ -23,12 +23,27 @@ def ir_transmmit(raw_data):
     try:
         print("에어컨 IR 신호 전송")
 
-        for index, duration_us in enumerate(raw_data):
-            print(index, duration_us)
-            if index % 2 == 0:
+        for index, (signal_type, duration_us) in enumerate(raw_data):
+            print(index, signal_type, duration_us)
+            # if index % 2 == 0:
+            #     pwm.ChangeDutyCycle(DUTY_CYCLE)
+            # else:
+            #     pwm.ChangeDutyCycle(0)
+
+            if signal_type == "pulse":
                 pwm.ChangeDutyCycle(DUTY_CYCLE)
-            else:
+
+            elif signal_type == "space":
                 pwm.ChangeDutyCycle(0)
+
+            elif signal_type == "timeout":
+                # timeout은 송신 데이터가 아니라 수신 종료 표시입니다.
+                break
+
+            else:
+                raise ValueError(
+                    f"지원하지 않는 RAW 신호: {signal_type}"
+                )
 
             wait_microseconds(duration_us)
 
