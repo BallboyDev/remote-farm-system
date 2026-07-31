@@ -13,7 +13,7 @@ def ir_recive():
     print('ir_recive')
 
 def ir_transmmit(raw_data):
-    print('ir_transmmit')
+    print('ir_transmmit :', raw_data)
 
     GPIO.setwarnings(False)
     GPIO.setmode(GPIO.BCM)
@@ -31,7 +31,7 @@ def ir_transmmit(raw_data):
             else:
                 pwm.ChangeDutyCycle(0)
 
-            wait_microseconds(duration_us)
+            wait_microseconds(duratio_us)
 
         pwm.ChangeDutyCycle(0)
         GPIO.output(18, GPIO.LOW)    
@@ -52,8 +52,7 @@ def ir_actions(command):
             print("recive")
         
         case 'transmit':
-            ir_transmmit(RAW_POWER_ON)
-            # print(RAW_DATA1)
+            ir_transmmit(RAW_DATA1)
         
         case _:
             print('지원하지 않는 명령어')

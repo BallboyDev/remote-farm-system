@@ -1,5 +1,3 @@
 sudo mode2 --driver default --device /dev/lirc0 | grep -E '^(pulse|space|timeout)' > /opt/remote-farm-system/Server/gpioServer/modules/rawData/aircon_raw.txt
 
-
-
-sudo mode2 --driver default --device /dev/lirc0 | grep -E '^(pulse|space|timeout)' > /opt/remote-farm-system/Server/gpioServer/modules/rawData/aircon_raw.txt
+sudo mode2 --driver default --device /dev/lirc0 | grep -E '^(pulse|space|timeout)'
