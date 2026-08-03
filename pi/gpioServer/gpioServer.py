@@ -7,10 +7,10 @@ from modules import actions
 
 
 server = socket.socket()
-server.bind(('127.0.0.1', 8888))
+server.bind(('127.0.0.1', 8080))
 server.listen()
 
-print(f'Python 서버 실행 중 : 127.0.0.1:8888')
+print(f'Python 서버 실행 중 : 127.0.0.1:8080')
 
 while True:
     client, address = server.accept()

@@ -8,7 +8,7 @@ const gpioConnection = (command) => {
         const client = net.createConnection(
             {
                 host: "127.0.0.1",
-                port: 8888,
+                port: 8080,
             },
             () => {
                 client.write(order);
