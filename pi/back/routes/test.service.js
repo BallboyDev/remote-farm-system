@@ -3,13 +3,13 @@ const gpioConnection = require('./gpio');
 const order = [
     { index: 1, device: 'led', command: 'on' },
     { index: 2, device: 'led', command: 'off' },
-    { index: 3, device: 'ir', command: 'transmit' },
-    { index: 4, device: 'ir', command: 'test' },
-    { index: 5, device: 'led', command: 'on' },
-    { index: 6, device: 'led', command: 'on' },
-    { index: 7, device: 'led', command: 'on' },
-    { index: 8, device: 'led', command: 'on' },
-    { index: 9, device: 'led', command: 'on' },
+    { index: 3, device: '', command: '' },
+    { index: 4, device: 'ir', command: 'transmit' },
+    { index: 5, device: 'ir', command: 'test' },
+    { index: 6, device: '', command: '' },
+    { index: 7, device: '', command: '' },
+    { index: 8, device: '', command: '' },
+    { index: 9, device: '', command: '' },
 ]
 
 const test1 = async () => {

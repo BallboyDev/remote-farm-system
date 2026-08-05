@@ -4,6 +4,10 @@ const gpioConnection = (command) => {
 
     const order = JSON.stringify(command)
 
+    if (command.device === '' || command.command === '') {
+        return Promise.resolve(`미설정 테스트 버튼 >> ${order}`);
+    }
+
     return new Promise((resolve, reject) => {
         const client = net.createConnection(
             {

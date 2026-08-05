@@ -1,151 +1,155 @@
-from .rawData.aircon_raw import RAW_DATA1
-from pathlib import Path
 import time
-import RPi.GPIO as GPIO
+
+import pigpio
+
+from .rawData.aircon_raw import RAW_DATA1
+
 
 TX_GPIO = 18
 CARRIER_HZ = 38_000
-DUTY_CYCLE = 33
+DUTY_CYCLE = 0.33
+
 
 def ir_recive():
-    print('ir_recive')
+    print("ir_recive")
+
+
+def make_carrier_pulses(duration_us):
+    """지정된 시간 동안 출력할 38kHz carrier pulse를 생성한다."""
+    if duration_us <= 0:
+        raise ValueError(f"pulse 시간은 0보다 커야 합니다: {duration_us}")
+
+    gpio_mask = 1 << TX_GPIO
+    period_us = 1_000_000 / CARRIER_HZ
+    high_us = max(1, round(period_us * DUTY_CYCLE))
+    cycle_count = max(1, round(duration_us / period_us))
+    elapsed_us = 0
+    pulses = []
+
+    for cycle_index in range(cycle_count):
+        # 주기 끝을 누적 반올림해 26us와 27us를 섞어 평균 38kHz를 만든다.
+        cycle_end_us = round((cycle_index + 1) * period_us)
+        low_us = max(1, cycle_end_us - elapsed_us - high_us)
+
+        pulses.append(pigpio.pulse(gpio_mask, 0, high_us))
+        pulses.append(pigpio.pulse(0, gpio_mask, low_us))
+        elapsed_us = cycle_end_us
+
+    return pulses
+
+
+def build_wave_pulses(raw_data):
+    """mode2 형식의 RAW 데이터를 pigpio wave pulse 목록으로 변환한다."""
+    gpio_mask = 1 << TX_GPIO
+    pulses = []
+
+    for signal_type, duration_us in raw_data:
+        if not isinstance(duration_us, int) or duration_us <= 0:
+            raise ValueError(
+                f"잘못된 RAW 신호 시간: {signal_type} {duration_us}"
+            )
+
+        if signal_type == "pulse":
+            pulses.extend(make_carrier_pulses(duration_us))
+
+        elif signal_type == "space":
+            pulses.append(pigpio.pulse(0, gpio_mask, duration_us))
+
+        elif signal_type == "timeout":
+            # timeout은 수신 종료 표시이므로 송신 파형에 포함하지 않는다.
+            break
+
+        else:
+            raise ValueError(f"지원하지 않는 RAW 신호: {signal_type}")
+
+    if not pulses:
+        raise ValueError("송신할 RAW 데이터가 없습니다.")
+
+    return pulses
+
 
 def ir_transmmit(raw_data):
-    print('ir_transmmit')
+    """RAW 데이터를 하나의 pigpio wave로 만들어 GPIO18에서 전송한다."""
+    pi = pigpio.pi()
 
-    GPIO.setwarnings(False)
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(TX_GPIO, GPIO.OUT, initial=GPIO.LOW)
+    if not pi.connected:
+        pi.stop()
+        raise RuntimeError(
+            "pigpiod에 연결할 수 없습니다. "
+            "'sudo systemctl start pigpiod'를 실행하세요."
+        )
 
-    pwm = GPIO.PWM(TX_GPIO, CARRIER_HZ)
-    pwm.start(0)
+    wave_id = None
 
     try:
-        print("에어컨 IR 신호 전송")
+        pi.set_mode(TX_GPIO, pigpio.OUTPUT)
+        pi.write(TX_GPIO, 0)
+        pi.wave_clear()
 
-        for index, (signal_type, duration_us) in enumerate(raw_data):
-            print(index, signal_type, duration_us)
-            # if index % 2 == 0:
-            #     pwm.ChangeDutyCycle(DUTY_CYCLE)
-            # else:
-            #     pwm.ChangeDutyCycle(0)
+        pulses = build_wave_pulses(raw_data)
+        added_pulse_count = pi.wave_add_generic(pulses)
 
-            if signal_type == "pulse":
-                pwm.ChangeDutyCycle(DUTY_CYCLE)
+        if added_pulse_count < 0:
+            raise RuntimeError(
+                f"pigpio wave pulse 등록 실패: {added_pulse_count}"
+            )
 
-            elif signal_type == "space":
-                pwm.ChangeDutyCycle(0)
+        wave_id = pi.wave_create()
 
-            elif signal_type == "timeout":
-                # timeout은 송신 데이터가 아니라 수신 종료 표시입니다.
-                break
+        if wave_id < 0:
+            raise RuntimeError(f"pigpio wave 생성 실패: {wave_id}")
 
-            else:
-                raise ValueError(
-                    f"지원하지 않는 RAW 신호: {signal_type}"
-                )
+        print(
+            "에어컨 IR 신호 전송: "
+            f"RAW {len(raw_data)}개, wave pulse {added_pulse_count}개"
+        )
 
-            wait_microseconds(duration_us)
+        send_result = pi.wave_send_once(wave_id)
 
-        pwm.ChangeDutyCycle(0)
-        GPIO.output(18, GPIO.LOW)    
-        print("전송 완료")
+        if send_result < 0:
+            raise RuntimeError(f"pigpio wave 전송 실패: {send_result}")
+
+        while pi.wave_tx_busy():
+            time.sleep(0.001)
+
+        print("에어컨 IR 신호 전송 완료")
 
     finally:
-        pwm.ChangeDutyCycle(0)
-        pwm.stop()
-        GPIO.output(TX_GPIO, GPIO.LOW)
-        GPIO.cleanup()
+        pi.wave_tx_stop()
+
+        if wave_id is not None and wave_id >= 0:
+            pi.wave_delete(wave_id)
+
+        pi.wave_clear()
+        pi.write(TX_GPIO, 0)
+        pi.stop()
+
 
 def ir_test():
-    print('ir_test')
+    """600us carrier와 100ms space를 10회 전송한다."""
+    test_raw_data = []
 
-    GPIO.setwarnings(False)
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(TX_GPIO, GPIO.OUT, initial=GPIO.LOW)
+    for _ in range(10):
+        test_raw_data.append(("pulse", 600))
+        test_raw_data.append(("space", 100_000))
 
-    # try:
-    #     print("5초 동안 OFF")
-    #     GPIO.output(TX_GPIO, GPIO.LOW)
-    #     time.sleep(5)
+    print(test_raw_data)
 
-    #     print("5초 동안 ON")
-    #     GPIO.output(TX_GPIO, GPIO.HIGH)
-    #     time.sleep(5)
+    ir_transmmit(test_raw_data)
 
-    #     print("다시 5초 동안 OFF")
-    #     GPIO.output(TX_GPIO, GPIO.LOW)
-    #     time.sleep(5)
-
-    # finally:
-    #     GPIO.output(TX_GPIO, GPIO.LOW)
-    #     GPIO.cleanup()
-
-    
-    pwm = GPIO.PWM(TX_GPIO, CARRIER_HZ)
-    pwm.start(0)
-
-    try:
-        time.sleep(1)
-
-        # for count in range(5):
-        #     print(f"{count + 1}: 10ms pulse 전송")
-
-        #     pwm.ChangeDutyCycle(DUTY_CYCLE)
-        #     time.sleep(0.010)
-
-        #     pwm.ChangeDutyCycle(0)
-        #     GPIO.output(TX_GPIO, GPIO.LOW)
-        #     time.sleep(0.100)
-
-        # for count in range(10):
-        #     pwm.ChangeDutyCycle(33)
-        #     time.sleep(0.0006)
-
-        #     pwm.ChangeDutyCycle(0)
-        #     GPIO.output(TX_GPIO, GPIO.LOW)
-        #     time.sleep(0.100)
-
-        for count in range(10):
-            pwm.ChangeDutyCycle(33)
-            time.sleep(0.002)
-
-            pwm.ChangeDutyCycle(0)
-            GPIO.output(TX_GPIO, GPIO.LOW)
-            time.sleep(0.100)
-
-    finally:
-        pwm.ChangeDutyCycle(0)
-        pwm.stop()
-        GPIO.output(TX_GPIO, GPIO.LOW)
-        GPIO.cleanup()
-
-def wait_microseconds(duration_us):
-    """
-    마이크로초 단위로 대기합니다.
-
-    Linux 스케줄러의 영향으로 약간의 시간 오차가
-    발생할 수 있습니다.
-    """
-    end_time = time.perf_counter_ns() + duration_us * 1_000
-
-    while time.perf_counter_ns() < end_time:
-        pass
 
 def ir_actions(command):
-
     match command:
-        case 'recive':
-            print("recive")
-        
-        case 'transmit':
+        case "recive":
+            ir_recive()
+
+        case "transmit":
             ir_transmmit(RAW_DATA1)
 
-        case 'test':
-            ir_test()    
-        
+        case "test":
+            ir_test()
+
         case _:
-            print('지원하지 않는 명령어')
+            raise ValueError(f"지원하지 않는 IR 명령어: {command}")
 
-
-    print('ir_actions: ', command)
+    print("ir_actions: ", command)

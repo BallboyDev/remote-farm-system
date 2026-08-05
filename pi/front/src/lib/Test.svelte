@@ -17,18 +17,19 @@
 </script>
 
 <WrapperModule title="Test">
+    <Input placeholder="Test Input" type="text" />
     <ButtonGroup>
         <Button
             color="primary"
             onclick={() => {
                 test(1);
-            }}>Test 1</Button
+            }}>1 : led / on</Button
         >
         <Button
             color="warning"
             onclick={() => {
                 test(2);
-            }}>Test 2</Button
+            }}>2 : led / off</Button
         >
         <Button
             color="danger"
@@ -42,13 +43,13 @@
             color="secondary"
             onclick={() => {
                 test(4);
-            }}>Test 4</Button
+            }}>4 : ir / transmit</Button
         >
         <Button
             color="success"
             onclick={() => {
                 test(5);
-            }}>Test 5</Button
+            }}>5 : ir / test</Button
         >
         <Button
             color="info"
